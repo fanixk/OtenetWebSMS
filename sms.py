@@ -36,8 +36,8 @@ class OtenetForm(QtGui.QWidget):
         self.content = self.parser()
 
         try:
-            dailyLabel = QtGui.QLabel("Daily: "+ self.getDailyRemaining(self.content)+ "/5")
-            monthlyLabel = QtGui.QLabel("Monthly: "+ self.getMonthlyRemaining(self.content)+ "/100")
+            dailyLabel = QtGui.QLabel("Daily: "+ self.getDailyRemaining(self.content) + "/5")
+            monthlyLabel = QtGui.QLabel("Monthly: "+ self.getMonthlyRemaining(self.content) + "/100")
         except:
             QtGui.QMessageBox.critical(self, "Login Error", "Invalid Login Information.")
             sys.exit(1)
@@ -127,8 +127,8 @@ class OtenetForm(QtGui.QWidget):
         QtGui.QMessageBox.information(self, "Sent!", "Message was successfully sent.")
         print "Message succesfully sent."
         
-        self.dailyLabel.setText(self, "Daily: "+ self.getDailyRemaining(self.content)+ "/5")
-        self.monthlyLabel.setText(self, "Monthly: "+ self.getMonthlyRemaining(self.content)+ "/100")
+        self.dailyLabel.setText(self, "Daily: "+ self.getDailyRemaining(self.content) + "/5")
+        self.monthlyLabel.setText(self, "Monthly: "+ self.getMonthlyRemaining(self.content) + "/100")
         
     def parser(self):
         """
