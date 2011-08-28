@@ -98,9 +98,9 @@ class OtenetForm(QtGui.QWidget):
             QtGui.QMessageBox.information(self, "Invalid Number", "Enter a valid phone number.")
             return
         
-        if len(self.message) > 160:
+        if len(self.message) > 137:
             passed = False
-            QtGui.QMessageBox.information(self, "Limit", "Limit 160 chars.")
+            QtGui.QMessageBox.information(self, "Limit", "Limit 137 chars.")
             return
         
         if not self.message:
