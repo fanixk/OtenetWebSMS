@@ -155,7 +155,6 @@ def login_ote(user, password):
     msg.select_form(name="loginform")
     msg["username"] = user
     msg["password"] = password
-    print "\nLogging in..."
     msg.submit()
     
 if __name__ == '__main__':
