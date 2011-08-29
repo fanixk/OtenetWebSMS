@@ -96,17 +96,14 @@ class OtenetForm(QtGui.QWidget):
         if not self.number.startswith("69") or len(self.number) > 10 or not self.number:
             passed = False
             QtGui.QMessageBox.information(self, "Invalid Number", "Enter a valid phone number.")
-            return
         
         if len(self.message) > 137:
             passed = False
             QtGui.QMessageBox.information(self, "Limit", "Limit 137 chars.")
-            return
         
         if not self.message:
             passed = False
             QtGui.QMessageBox.information(self, "Empty", "Enter a message.")
-            return
         
         if passed == True:
             self.sendSMS()
@@ -128,6 +125,7 @@ class OtenetForm(QtGui.QWidget):
         
         self.dailyLabel.setText(self, "Daily: " + self.getDailyRemaining(self.content) + "/5")
         self.monthlyLabel.setText(self, "Monthly: " + self.getMonthlyRemaining(self.content) + "/100")
+        QCoreApplication.processEvents()
         
     def parser(self):
         """
