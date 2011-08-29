@@ -23,6 +23,7 @@ import sys
 import re
 
 msg = Browser()
+msg.set_handle_robots(False)
 
 class OtenetForm(QtGui.QWidget):
     """
@@ -114,7 +115,6 @@ class OtenetForm(QtGui.QWidget):
 	  (add error handling)
         """
         
-        msg.set_handle_robots(False)
         msg.open("http://tools.otenet.gr/tools/tiles/web2sms.do?showPage=smsSend&mnu=smenu23")
         msg.select_form(name="sendform")
         msg["phone"] = self.number
@@ -148,7 +148,6 @@ def login_ote(user, password):
       Login
       (add error handling)
     """
-    msg.set_handle_robots(False)
     msg.open("http://tools.otenet.gr/tools/index.do")
     msg.select_form(name="loginform")
     msg["username"] = user
