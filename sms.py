@@ -37,8 +37,8 @@ class OtenetForm(QtGui.QWidget):
         self.content = self.parser()
 
         try:
-            dailyLabel = QtGui.QLabel("Daily: " + self.getDailyRemaining(self.content) + "/5")
-            monthlyLabel = QtGui.QLabel("Monthly: " + self.getMonthlyRemaining(self.content) + "/100")
+            self.dailyLabel = QtGui.QLabel("Daily: " + self.getDailyRemaining(self.content) + "/5")
+            self.monthlyLabel = QtGui.QLabel("Monthly: " + self.getMonthlyRemaining(self.content) + "/100")
         except:
             QtGui.QMessageBox.critical(self, "Login Error", "Invalid Login Information.")
             sys.exit(1)
@@ -62,8 +62,8 @@ class OtenetForm(QtGui.QWidget):
         buttonLayout1.addWidget(self.exitButton)
         
         labelLayout1 = QtGui.QHBoxLayout()
-        labelLayout1.addWidget(dailyLabel)
-        labelLayout1.addWidget(monthlyLabel)
+        labelLayout1.addWidget(self.dailyLabel)
+        labelLayout1.addWidget(self.monthlyLabel)
 
         mainLayout = QtGui.QGridLayout()
         mainLayout.addWidget(phoneLabel, 0, 0)
@@ -121,11 +121,22 @@ class OtenetForm(QtGui.QWidget):
         msg["message"] = self.message
         msg.submit()
         
-        QtGui.QMessageBox.information(self, "Sent!", "Message was successfully sent.")
+        QtGui.QMessageBox.information(self, "Sent!", "Message was successfully sent.")	#add check for successful sms + limit
+	
+	#debugging prints
+        print self.getDailyRemaining(self.content)
+        print self.getMonthlyRemaining(self.content)
+        #get new values
         self.content = self.parser()
-        self.dailyLabel.setText(self, "Daily: " + self.getDailyRemaining(self.content) + "/5")
-        self.monthlyLabel.setText(self, "Monthly: " + self.getMonthlyRemaining(self.content) + "/100")
-        #QCoreApplication.processEvents()#
+        #set new values
+        self.dailyLabel.setText("Daily: " + self.getDailyRemaining(self.content) + "/5")
+        self.monthlyLabel.setText("Monthly: " + self.getMonthlyRemaining(self.content) + "/100")
+        #debug
+        print self.getDailyRemaining(self.content)
+        print self.getMonthlyRemaining(self.content)
+        #update gui
+        self.dailyLabel.repaint()
+        self.monthlyLabel.repaint()
         
     def parser(self):
         """
