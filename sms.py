@@ -37,14 +37,18 @@ class OtenetForm(QtGui.QWidget):
         self.message = ''
         self.number = ''
         self.content = self.parser()
+        self.daily = self.getDailyRemaining(self.content)
+        self.monthly = self.getMonthlyRemaining(self.content)
 
         try:
-            self.dailyLabel = QtGui.QLabel("Daily: " + self.getDailyRemaining(self.content) + "/5")
-            self.monthlyLabel = QtGui.QLabel("Monthly: " + self.getMonthlyRemaining(self.content) + "/100")
+            self.dailyLabel = QtGui.QLabel("Daily: " + self.daily + "/5")
+            self.monthlyLabel = QtGui.QLabel("Monthly: " +  self.monthly + "/100")
         except:
             QtGui.QMessageBox.critical(self, "Login Error", "Invalid Login Information.")
-            sys.exit(1)
-            
+            self.exit_app()
+
+        self.checkLimit()   #Check SMS limit-->quit if out of limit
+        
         phoneLabel = QtGui.QLabel("Phone:")
         self.phoneLine = QtGui.QLineEdit()
 
@@ -78,6 +82,15 @@ class OtenetForm(QtGui.QWidget):
         self.setLayout(mainLayout)
         self.setWindowTitle("OtenetWebSMS Sender")
 
+
+    def checkLimit(self):
+        if self.daily == '5':
+            QtGui.QMessageBox.critical(self, "Limit", "Reached daily limit of 5 sms.")
+            self.exit_app()
+        if self.monthly == '100':
+            QtGui.QMessageBox.critical(self, "Limit", "Reached monthly limit of 100 sms.")
+            self.exit_app()
+            
     def exit_app(self):
         """
             Exit Application
@@ -91,8 +104,8 @@ class OtenetForm(QtGui.QWidget):
         """
         self.number = self.phoneLine.text()
         self.message = self.msgText.toPlainText()
-        self.number = str(self.number)  	#QString-->String
-        self.message = str(self.message)	#################
+        self.number = str(self.number)  	#QString-->String#
+        self.message = str(self.message)	##################
 
         passed = True
         
@@ -123,22 +136,22 @@ class OtenetForm(QtGui.QWidget):
         msg["message"] = self.message
         msg.submit()
         
-        QtGui.QMessageBox.information(self, "Sent!", "Message was successfully sent.")	#add check for successful sms + limit
+        QtGui.QMessageBox.information(self, "Sent!", "Message was successfully sent.")
 	
-	#debugging prints
-        print self.getDailyRemaining(self.content)
-        print self.getMonthlyRemaining(self.content)
         #get new values
         self.content = self.parser()
+        self.daily = self.getDailyRemaining(self.content)
+        self.monthly = self.getMonthlyRemaining(self.content)
         #set new values
-        self.dailyLabel.setText("Daily: " + self.getDailyRemaining(self.content) + "/5")
-        self.monthlyLabel.setText("Monthly: " + self.getMonthlyRemaining(self.content) + "/100")
-        #debug
-        print self.getDailyRemaining(self.content)
-        print self.getMonthlyRemaining(self.content)
+        self.dailyLabel.setText("Daily: " + self.daily + "/5")
+        self.monthlyLabel.setText("Monthly: " + self.monthly + "/100")
         #update gui
         self.dailyLabel.repaint()
         self.monthlyLabel.repaint()
+        #makes sure you dont pass the sms limit
+        self.checkLimit()
+	self.phoneLine.clear()
+	self.msgText.clear()
         
     def parser(self):
         """
@@ -148,11 +161,11 @@ class OtenetForm(QtGui.QWidget):
         content = str(resp.read())
         return content
         
-    def getDailyRemaining(self,content):
+    def getDailyRemaining(self, content):
         content = re.search(r'<input type="hidden" name="todaySMS" value="(\d+)">', content)
         return content.group(1)
         
-    def getMonthlyRemaining(self,content):
+    def getMonthlyRemaining(self, content):
         content = re.search(r'<input type="hidden" name="monthSMS" value="(\d+)">', content)
         return content.group(1)
 
@@ -173,3 +186,4 @@ if __name__ == '__main__':
     otenet_form = OtenetForm()
     otenet_form.show()
     sys.exit(app.exec_())
+
